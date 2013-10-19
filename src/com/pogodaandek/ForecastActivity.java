@@ -4,12 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +32,7 @@ public class ForecastActivity extends Activity {
 	public Location2 disLoc = null;
 	public Location2 obsLoc = null;
 	public Conditions cndtns = null;
+	public List<ForecastDay> txtForecast;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +107,6 @@ public class ForecastActivity extends Activity {
 				JSONObject current_observation = jObject
 						.getJSONObject("current_observation");
 				Log.i("COS", "CURRENT OBS." + current_observation.toString());
-				JSONObject forecast = jObject.getJSONObject("forecast");
-				Log.i("COS", "FORECAST " + forecast.toString());
 
 				// Obrabianie conditions
 
@@ -192,6 +194,32 @@ public class ForecastActivity extends Activity {
 				cndtns.weather = current_observation.getString("weather");
 				Log.i("COS. Conditions:", cndtns.toString() + " "
 						+ cndtns.feelslikeString + " " + cndtns.weather);
+
+				JSONObject forecast = jObject.getJSONObject("forecast");
+				JSONObject txtForecast = forecast.getJSONObject("txt_forecast");
+				JSONArray forecastday = txtForecast.getJSONArray("forecastday");
+				this.txtForecast = new ArrayList<ForecastDay>();
+				for (int i = 0; i < 8; i++) {
+					Log.i("forecast", forecastday.getJSONObject(i).toString());
+					JSONObject tmp = forecastday.getJSONObject(i);
+					ForecastDay dzien = new ForecastDay();
+					dzien.period = tmp.getString("period");
+					dzien.icon = tmp.getString("icon");
+					dzien.iconUrl = tmp.getString("icon_url");
+					dzien.title = tmp.getString("title");
+					dzien.fcttext = tmp.getString("fcttext");
+					dzien.fcttextMetric = tmp.getString("fcttext_metric");
+					dzien.pop = tmp.getString("pop");
+					this.txtForecast.add(dzien);
+				}
+				for (ForecastDay d : this.txtForecast) {
+					Log.i("txtfrcst", d.title + " " + d.fcttextMetric);
+				}
+				JSONObject simpleForecast = forecast
+						.getJSONObject("simpleforecast");
+				Log.i("COS", "FORECAST " + forecast.toString());
+				Log.i("txt_forecast", txtForecast.toString());
+				Log.i("simpleforecast", simpleForecast.toString());
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
