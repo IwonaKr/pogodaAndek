@@ -28,6 +28,7 @@ public class ForecastActivity extends Activity {
 	public String json_string_response = null;
 	public Location2 disLoc = null;
 	public Location2 obsLoc = null;
+	public Conditions cndtns = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,29 +108,90 @@ public class ForecastActivity extends Activity {
 
 				// Obrabianie conditions
 
-				disLoc=new Location2();
+				disLoc = new Location2();
 				JSONObject display_location = current_observation
 						.getJSONObject("display_location");
 				disLoc.setFull(display_location.getString("full"));
 				disLoc.setCity(display_location.getString("city"));
 				disLoc.setCountry(display_location.getString("country"));
-				disLoc.setCountry_iso3166(display_location.getString("country_iso3166"));
+				disLoc.setCountry_iso3166(display_location
+						.getString("country_iso3166"));
 				disLoc.setElevation(display_location.getString("elevation"));
 				disLoc.setLatitude(display_location.getString("latitude"));
-				disLoc.setLongitude(display_location.getString("longitude"));				
-				Log.i("disLoc",disLoc.getLatitude()+" "+disLoc.getLongitude()+" "+disLoc.getFull());
-				
+				disLoc.setLongitude(display_location.getString("longitude"));
+				Log.i("disLoc",
+						disLoc.getLatitude() + " " + disLoc.getLongitude()
+								+ " " + disLoc.getFull());
+
 				obsLoc = new Location2();
 				JSONObject observation_location = current_observation
 						.getJSONObject("observation_location");
 				obsLoc.setFull(observation_location.getString("full"));
 				obsLoc.setCity(observation_location.getString("city"));
 				obsLoc.setCountry(observation_location.getString("country"));
-				obsLoc.setCountry_iso3166(observation_location.getString("country_iso3166"));
+				obsLoc.setCountry_iso3166(observation_location
+						.getString("country_iso3166"));
 				obsLoc.setElevation(observation_location.getString("elevation"));
 				obsLoc.setLatitude(observation_location.getString("latitude"));
 				obsLoc.setLongitude(observation_location.getString("longitude"));
-				Log.i("obsLoc",obsLoc.getLatitude()+" "+obsLoc.getLongitude()+" "+obsLoc.getFull());
+				Log.i("obsLoc",
+						obsLoc.getLatitude() + " " + obsLoc.getLongitude()
+								+ " " + obsLoc.getFull());
+
+				cndtns = new Conditions();
+				cndtns.dewpointC = current_observation.getString("dewpoint_c");
+				cndtns.dewpointString = current_observation
+						.getString("dewpoint_string");
+				cndtns.feelslikeString = current_observation
+						.getString("feelslike_string");
+				cndtns.feelslikeC = current_observation
+						.getString("feelslike_c");
+				cndtns.heatIndexC = current_observation
+						.getString("heat_index_c");
+				cndtns.heatIndexString = current_observation
+						.getString("heat_index_string");
+				cndtns.icon = current_observation.getString("icon");
+				cndtns.iconURL = current_observation.getString("icon_url");
+				cndtns.localTimeRfc822 = current_observation
+						.getString("local_time_rfc822");
+				cndtns.localTzLong = current_observation
+						.getString("local_tz_long");
+				cndtns.localTzOffset = current_observation
+						.getString("local_tz_offset");
+				cndtns.localTzShort = current_observation
+						.getString("local_tz_short");
+				cndtns.observationEpoch = current_observation
+						.getString("observation_epoch");
+				cndtns.observationTime = current_observation
+						.getString("observation_time");
+				cndtns.observationTimeRfc822 = current_observation
+						.getString("observation_time_rfc822");
+				cndtns.pressureMb = current_observation
+						.getString("pressure_mb");
+				cndtns.pressureTrend = current_observation
+						.getString("pressure_trend");
+				cndtns.relativeHumidity = current_observation
+						.getString("relative_humidity");
+				cndtns.tempC = current_observation.getString("temp_c");
+				cndtns.temperatureString = current_observation
+						.getString("temperature_string");
+				cndtns.UV = current_observation.getString("UV");
+				cndtns.visibilityKm = current_observation
+						.getString("visibility_km");
+				cndtns.windChillC = current_observation
+						.getString("windchill_c");
+				cndtns.windChillString = current_observation
+						.getString("windchill_string");
+				cndtns.windDegrees = current_observation
+						.getString("wind_degrees");
+				cndtns.windDir = current_observation.getString("wind_dir");
+				cndtns.windKph = current_observation.getString("wind_kph");
+				cndtns.windMph = current_observation.getString("wind_mph");
+				cndtns.windString = current_observation
+						.getString("wind_string");
+				cndtns.weather = current_observation.getString("weather");
+				Log.i("COS. Conditions:", cndtns.toString() + " "
+						+ cndtns.feelslikeString + " " + cndtns.weather);
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
