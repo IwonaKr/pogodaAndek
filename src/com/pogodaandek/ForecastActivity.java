@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Documented;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ForecastActivity extends Activity {
 	public Location2 obsLoc = null;
 	public Conditions cndtns = null;
 	public List<ForecastDay> txtForecast;
+	public List<ForecastDay> simpleForecast;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -195,13 +197,20 @@ public class ForecastActivity extends Activity {
 				Log.i("COS. Conditions:", cndtns.toString() + " "
 						+ cndtns.feelslikeString + " " + cndtns.weather);
 
+				/*
+				 * Obrabianie FORECAST - txtForecast
+				 */
 				JSONObject forecast = jObject.getJSONObject("forecast");
+				Log.i("COS", "FORECAST " + forecast.toString());
+
 				JSONObject txtForecast = forecast.getJSONObject("txt_forecast");
-				JSONArray forecastday = txtForecast.getJSONArray("forecastday");
+				JSONArray txtForecastDay = txtForecast
+						.getJSONArray("forecastday");
 				this.txtForecast = new ArrayList<ForecastDay>();
-				for (int i = 0; i < 8; i++) {
-					Log.i("forecast", forecastday.getJSONObject(i).toString());
-					JSONObject tmp = forecastday.getJSONObject(i);
+				for (int i = 0; i < txtForecastDay.length(); i++) {
+					Log.i("forecast", txtForecastDay.getJSONObject(i)
+							.toString());
+					JSONObject tmp = txtForecastDay.getJSONObject(i);
 					ForecastDay dzien = new ForecastDay();
 					dzien.period = tmp.getString("period");
 					dzien.icon = tmp.getString("icon");
@@ -215,10 +224,67 @@ public class ForecastActivity extends Activity {
 				for (ForecastDay d : this.txtForecast) {
 					Log.i("txtfrcst", d.title + " " + d.fcttextMetric);
 				}
+				Log.i("txt_forecast", txtForecast.toString());
+
+				/*
+				 * Obrabianie FORECAST - simpleforecast
+				 */
 				JSONObject simpleForecast = forecast
 						.getJSONObject("simpleforecast");
-				Log.i("COS", "FORECAST " + forecast.toString());
-				Log.i("txt_forecast", txtForecast.toString());
+				JSONArray splForecastDay = simpleForecast
+						.getJSONArray("forecastday");
+				this.simpleForecast = new ArrayList<ForecastDay>();
+				for (int i = 0; i < splForecastDay.length(); i++) {
+					Log.i("simple", splForecastDay.getJSONObject(i).toString());
+					JSONObject tmp = splForecastDay.getJSONObject(i);
+					JSONObject tempDate = tmp.getJSONObject("date");
+					Date data = new Date();
+					ForecastDay dzien = new ForecastDay();
+					//pomocnicze zmienne do konwersji ze stringa do int 
+					int pom1=0;
+					String pom2="";
+					JSONObject pom3=new JSONObject();
+					
+					data.day = tempDate.getString("day");
+					data.epoch = tempDate.getString("epoch");
+					data.hour = tempDate.getString("hour");
+					data.min = tempDate.getString("min");
+					data.month = tempDate.getString("month");
+					data.monthName = tempDate.getString("monthname");
+					data.pretty = tempDate.getString("pretty");
+					data.ampm = tempDate.getString("ampm");
+					data.tzLong = tempDate.getString("tz_long");
+					data.tzShort = tempDate.getString("tz_short");
+					data.weekDay = tempDate.getString("weekday");
+					data.weekDayShort = tempDate.getString("weekday_short");
+					data.yday = tempDate.getString("yday");
+					data.year = tempDate.getString("year");
+					dzien.data=data;
+					dzien.period=tmp.getString("period");
+					dzien.icon = tmp.getString("icon");
+					dzien.iconUrl = tmp.getString("icon_url");
+					dzien.pop = tmp.getString("pop");
+					dzien.conditions=tmp.getString("conditions");
+					dzien.avehumidity=Integer.parseInt(tmp.getString("avehumidity"));
+					dzien.minhumidity=Integer.parseInt(tmp.getString("minhumidity"));
+					dzien.maxhumidity=Integer.parseInt(tmp.getString("maxhumidity"));
+					//wiatr max i ave
+					pom3=tmp.getJSONObject("maxwind");
+					dzien.maxwind_degrees=pom3.getString("degrees");
+					dzien.maxwind_dir=pom3.getString("dir");
+					dzien.maxwind_kph=Integer.parseInt(pom3.getString("kph"));
+					dzien.maxwind_mph=Integer.parseInt(pom3.getString("mph"));
+					pom3=tmp.getJSONObject("avewind");
+					dzien.avewind_degrees=pom3.getString("degrees");
+					dzien.avewind_dir=pom3.getString("dir");
+					dzien.avewind_kph=Integer.parseInt(pom3.getString("kph"));
+					dzien.avewind_mph=Integer.parseInt(pom3.getString("mph"));
+					//temperatury
+					pom3=tmp.getJSONObject("high");
+					dzien.highTempC=pom3.getString("celsius");
+					Log.i("AVEHUMIDITY", String.valueOf(dzien.avehumidity));
+				}
+
 				Log.i("simpleforecast", simpleForecast.toString());
 
 			} catch (JSONException e) {

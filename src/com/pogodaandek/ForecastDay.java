@@ -12,7 +12,7 @@ public class ForecastDay {
 	
 	//dla wyników forecast z SIMPLE FORECAST
 	public String highTempC;
-	public String locTempC;
+	public String lowTempC;
 	public String conditions;
 	public String skyIcon;
 	public String qpfAllDay; //iloœciowa prognoza opadów w przeci¹gu 3 nastêpnych godzin
