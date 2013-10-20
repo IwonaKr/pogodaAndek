@@ -240,11 +240,11 @@ public class ForecastActivity extends Activity {
 					JSONObject tempDate = tmp.getJSONObject("date");
 					Date data = new Date();
 					ForecastDay dzien = new ForecastDay();
-					//pomocnicze zmienne do konwersji ze stringa do int 
-					int pom1=0;
-					String pom2="";
-					JSONObject pom3=new JSONObject();
-					
+					// pomocnicze zmienne do konwersji ze stringa do int
+					int pom1 = 0;
+					String pom2 = "";
+					JSONObject pom3 = new JSONObject();
+
 					data.day = tempDate.getString("day");
 					data.epoch = tempDate.getString("epoch");
 					data.hour = tempDate.getString("hour");
@@ -259,30 +259,42 @@ public class ForecastActivity extends Activity {
 					data.weekDayShort = tempDate.getString("weekday_short");
 					data.yday = tempDate.getString("yday");
 					data.year = tempDate.getString("year");
-					dzien.data=data;
-					dzien.period=tmp.getString("period");
+					dzien.data = data;
+					dzien.period = tmp.getString("period");
 					dzien.icon = tmp.getString("icon");
 					dzien.iconUrl = tmp.getString("icon_url");
 					dzien.pop = tmp.getString("pop");
-					dzien.conditions=tmp.getString("conditions");
-					dzien.avehumidity=Integer.parseInt(tmp.getString("avehumidity"));
-					dzien.minhumidity=Integer.parseInt(tmp.getString("minhumidity"));
-					dzien.maxhumidity=Integer.parseInt(tmp.getString("maxhumidity"));
-					//wiatr max i ave
-					pom3=tmp.getJSONObject("maxwind");
-					dzien.maxwind_degrees=pom3.getString("degrees");
-					dzien.maxwind_dir=pom3.getString("dir");
-					dzien.maxwind_kph=Integer.parseInt(pom3.getString("kph"));
-					dzien.maxwind_mph=Integer.parseInt(pom3.getString("mph"));
-					pom3=tmp.getJSONObject("avewind");
-					dzien.avewind_degrees=pom3.getString("degrees");
-					dzien.avewind_dir=pom3.getString("dir");
-					dzien.avewind_kph=Integer.parseInt(pom3.getString("kph"));
-					dzien.avewind_mph=Integer.parseInt(pom3.getString("mph"));
-					//temperatury
-					pom3=tmp.getJSONObject("high");
-					dzien.highTempC=pom3.getString("celsius");
-					Log.i("AVEHUMIDITY", String.valueOf(dzien.avehumidity));
+					dzien.conditions = tmp.getString("conditions");
+					dzien.avehumidity = Integer.parseInt(tmp
+							.getString("avehumidity"));
+					dzien.minhumidity = Integer.parseInt(tmp
+							.getString("minhumidity"));
+					dzien.maxhumidity = Integer.parseInt(tmp
+							.getString("maxhumidity"));
+					// wiatr max i ave
+					pom3 = tmp.getJSONObject("maxwind");
+					dzien.maxwind_degrees = pom3.getString("degrees");
+					dzien.maxwind_dir = pom3.getString("dir");
+					dzien.maxwind_kph = Integer.parseInt(pom3.getString("kph"));
+					dzien.maxwind_mph = Integer.parseInt(pom3.getString("mph"));
+					pom3 = tmp.getJSONObject("avewind");
+					dzien.avewind_degrees = pom3.getString("degrees");
+					dzien.avewind_dir = pom3.getString("dir");
+					dzien.avewind_kph = Integer.parseInt(pom3.getString("kph"));
+					dzien.avewind_mph = Integer.parseInt(pom3.getString("mph"));
+					// temperatury i opady
+					pom3 = tmp.getJSONObject("high");
+					dzien.highTempC = pom3.getString("celsius");
+					pom3 = tmp.getJSONObject("low");
+					dzien.lowTempC = pom3.getString("celsius");
+					pom3 = tmp.getJSONObject("qpf_allday");
+					dzien.qpfAllDay = pom3.getString("mm");
+					pom3 = tmp.getJSONObject("snow_allday");
+					dzien.snowAllDay = pom3.getString("cm");
+					this.simpleForecast.add(dzien);
+				}
+				for (ForecastDay d : this.simpleForecast) {
+					Log.i(d.data.day, d.data.pretty + " " + d.conditions);
 				}
 
 				Log.i("simpleforecast", simpleForecast.toString());
