@@ -299,6 +299,12 @@ public class ForecastActivity extends Activity {
 
 				Log.i("simpleforecast", simpleForecast.toString());
 
+				JSONObject astronomy = jObject.getJSONObject("moon_phase");
+				Astronomy astronomia = new Astronomy();
+				astronomia.ageOfMoon=astronomy.getString("ageOfMoon");
+				astronomia.phaseofMoon=astronomy.getString("phaseofMoon");
+			
+				Log.i("astronomy", astronomy.toString());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
