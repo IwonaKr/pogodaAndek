@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
@@ -296,14 +297,40 @@ public class ForecastActivity extends Activity {
 				for (ForecastDay d : this.simpleForecast) {
 					Log.i(d.data.day, d.data.pretty + " " + d.conditions);
 				}
-
 				Log.i("simpleforecast", simpleForecast.toString());
-
+				
+				
+				
+				/*
+				 * OBRABIANIE DANYCH ZWI¥ZANYCH Z ASTRONOMI¥-S£OÑCE I KSIÊ¯YÆ
+				 */
 				JSONObject astronomy = jObject.getJSONObject("moon_phase");
 				Astronomy astronomia = new Astronomy();
-				astronomia.ageOfMoon=astronomy.getString("ageOfMoon");
-				astronomia.phaseofMoon=astronomy.getString("phaseofMoon");
-			
+				astronomia.ageOfMoon = astronomy.getString("ageOfMoon");
+				astronomia.phaseofMoon = astronomy.getString("phaseofMoon");
+
+				JSONObject pom3 = new JSONObject();
+				pom3 = astronomy.getJSONObject("sunrise");
+				Time g = new Time();
+				g.hour = Integer.parseInt(pom3.getString("hour"));
+				g.minute = Integer.parseInt(pom3.getString("minute"));
+				astronomia.moonrise = g;
+				pom3 = astronomy.getJSONObject("sunset");
+				g.hour = Integer.parseInt(pom3.getString("hour"));
+				g.minute = Integer.parseInt(pom3.getString("minute"));
+				astronomia.moonset = g;
+				astronomy = jObject.getJSONObject("sun_phase");
+				pom3 = astronomy.getJSONObject("sunrise");
+				g.hour = Integer.parseInt(pom3.getString("hour"));
+				g.minute = Integer.parseInt(pom3.getString("minute"));
+				astronomia.sunrise = g;
+				pom3 = astronomy.getJSONObject("sunset");
+				g.hour = Integer.parseInt(pom3.getString("hour"));
+				g.minute = Integer.parseInt(pom3.getString("minute"));
+				astronomia.sunset = g;
+				Log.i("CZAS", astronomia.moonrise.hour + " "
+						+ astronomia.moonrise.minute);
+
 				Log.i("astronomy", astronomy.toString());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
