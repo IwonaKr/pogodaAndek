@@ -24,7 +24,7 @@ public class ForecastDay {
 	public int minhumidity;
 	
 	//Wiatr
-	public int maxwind_mph;
+	public int maxwind_mph; //MILE na h
 	public int maxwind_kph;
 	public String maxwind_degrees; //stopnie kierunku wiatru
 	public String maxwind_dir; //kierunek wiatru
